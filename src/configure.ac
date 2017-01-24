@@ -1678,6 +1678,63 @@ elif test "$python3_ok" = yes; then
   fi
 fi
 
+AC_MSG_CHECKING(--enable-php7interp argument)
+AC_ARG_ENABLE(php7interp,
+	[  --enable-php7interp[=OPTS]     Include PHP 7 interpreter. [default=no] [OPTS=no/yes/dynamic]], ,
+	[enable_php7interp="no"])
+AC_MSG_RESULT($enable_php7interp)
+if test "$enable_php7interp" = "yes" -o "$enable_php7interp" = "dynamic"; then
+  if test "x$features" = "xtiny" -o "x$features" = "xsmall"; then
+    AC_MSG_ERROR([cannot use PHP with tiny or small features])
+  fi
+
+  AC_ARG_WITH(php-config,
+    [  --with-php-config=PATH]  php-config executable,
+    [ vi_cv_path_php_conf="${withval}" ])
+
+  AC_PATH_PROGS(vi_cv_path_php_conf, php-config)
+
+  if test "X$vi_cv_path_php_conf" != "X"; then
+    AC_CACHE_CHECK(PHP binary, vi_cv_var_php,
+      [[vi_cv_var_php=`${vi_cv_path_php_conf} --php-binary`]])
+
+    AC_CACHE_CHECK(PHP version, vi_cv_var_php_version,
+      [[vi_cv_var_php_version=`${vi_cv_path_php_conf} --version`]])
+
+    if ${vi_cv_var_php} -r 'exit((int) version_compare(PHP_VERSION, "7.0.0", ">="));'; then
+      AC_MSG_ERROR([Only support PHP 7 or greater])
+    fi
+
+    AC_CACHE_CHECK(PHP SAPI, vi_cv_var_php_sapis,
+      [[vi_cv_var_php_sapis=`${vi_cv_path_php_conf} --php-sapis`]])
+
+    for sapi in ${vi_cv_var_php_sapis}; do
+      if test "x$sapi" = "xembed"; then
+        vi_cv_have_php_embed="yes"
+      fi
+    done
+
+    if test "x$vi_cv_have_php_embed" = "x"; then
+      AC_MSG_ERROR([Could not find embed PHP])
+    fi
+  else
+    AC_MSG_ERROR([Could not find php-config])
+  fi
+
+  #AC_CHECK_LIB(php7, php_embed_init)
+
+  PHP_SRC="if_php.c"
+  PHP_OBJ="objects/if_php.o"
+  PHP_CFLAGS=`${vi_cv_path_php_conf} --includes`
+  PHP_LIBS="-L`${vi_cv_path_php_conf} --prefix`/lib -lphp7"
+  AC_DEFINE(FEAT_PHP)
+fi
+
+AC_SUBST(PHP_SRC)
+AC_SUBST(PHP_OBJ)
+AC_SUBST(PHP_CFLAGS)
+AC_SUBST(PHP_LIBS)
+
 AC_MSG_CHECKING(--enable-tclinterp argument)
 AC_ARG_ENABLE(tclinterp,
 	[  --enable-tclinterp[=OPTS]      Include Tcl interpreter. [default=no] [OPTS=no/yes/dynamic]], ,

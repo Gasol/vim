@@ -1419,7 +1419,7 @@ ALL_CFLAGS = $(PRE_DEFS) $(CFLAGS) $(PROFILE_CFLAGS) $(SANITIZER_CFLAGS) $(LEAK_
 # with "-E".
 OSDEF_CFLAGS = $(PRE_DEFS) $(POST_DEFS)
 
-LINT_CFLAGS = -DLINT -I. $(PRE_DEFS) $(POST_DEFS) $(RUBY_CFLAGS) $(LUA_CFLAGS) $(PERL_CFLAGS) $(PYTHON_CFLAGS) $(PYTHON3_CFLAGS) $(TCL_CFLAGS) -Dinline= -D__extension__= -Dalloca=alloca
+LINT_CFLAGS = -DLINT -I. $(PRE_DEFS) $(POST_DEFS) $(RUBY_CFLAGS) $(LUA_CFLAGS) $(PERL_CFLAGS) $(PHP_CFLAGS) $(PYTHON_CFLAGS) $(PYTHON3_CFLAGS) $(TCL_CFLAGS) -Dinline= -D__extension__= -Dalloca=alloca
 
 LINT_EXTRA = -DHANGUL_INPUT -D"__attribute__(x)="
 
@@ -1440,6 +1440,7 @@ ALL_LIBS = \
 	   $(EXTRA_LIBS) \
 	   $(LUA_LIBS) \
 	   $(PERL_LIBS) \
+	   $(PHP_LIBS) \
 	   $(PYTHON_LIBS) \
 	   $(PYTHON3_LIBS) \
 	   $(TCL_LIBS) \
@@ -1567,6 +1568,7 @@ SRC =	$(BASIC_SRC) \
 	$(LUA_SRC) \
 	$(MZSCHEME_SRC) \
 	$(PERL_SRC) \
+	$(PHP_SRC) \
 	$(PYTHON_SRC) $(PYTHON3_SRC) \
 	$(TCL_SRC) \
 	$(RUBY_SRC) \
@@ -1667,6 +1669,7 @@ OBJ_COMMON = \
 	$(LUA_OBJ) \
 	$(MZSCHEME_OBJ) \
 	$(PERL_OBJ) \
+	$(PHP_OBJ) \
 	$(PYTHON_OBJ) \
 	$(PYTHON3_OBJ) \
 	$(TCL_OBJ) \
@@ -3039,6 +3042,9 @@ objects/if_python.o: if_python.c if_py_both.h
 objects/if_python3.o: if_python3.c if_py_both.h
 	$(CCC_NF) $(PYTHON3_CFLAGS) $(PYTHON3_CFLAGS_EXTRA) $(ALL_CFLAGS) -o $@ if_python3.c
 
+objects/if_php.o: if_php.c
+	$(CCC_NF) $(PHP_CFLAGS) $(ALL_CFLAGS) -o $@ $<
+
 objects/if_ruby.o: if_ruby.c
 	$(CCC_NF) $(RUBY_CFLAGS) $(ALL_CFLAGS) -o $@ if_ruby.c
 
@@ -3100,7 +3106,7 @@ objects/ops.o: ops.c
 	$(CCC) -o $@ ops.c
 
 objects/option.o: option.c
-	$(CCC_NF) $(LUA_CFLAGS) $(PERL_CFLAGS) $(PYTHON_CFLAGS) $(PYTHON3_CFLAGS) $(RUBY_CFLAGS) $(TCL_CFLAGS) $(ALL_CFLAGS) -o $@ option.c
+	$(CCC_NF) $(LUA_CFLAGS) $(PERL_CFLAGS) $(PHP_CFLAGS) $(PYTHON_CFLAGS) $(PYTHON3_CFLAGS) $(RUBY_CFLAGS) $(TCL_CFLAGS) $(ALL_CFLAGS) -o $@ option.c
 
 objects/os_beos.o: os_beos.c
 	$(CCC) -o $@ os_beos.c
