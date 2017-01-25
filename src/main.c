@@ -1475,6 +1475,9 @@ getout(int exitval)
 #ifdef FEAT_PERL
     perl_end();
 #endif
+#ifdef FEAT_PHP
+    php_end();
+#endif
 #if defined(USE_ICONV) && defined(DYNAMIC_ICONV)
     iconv_end();
 #endif

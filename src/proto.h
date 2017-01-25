@@ -257,6 +257,10 @@ extern char *vim_SelFile(Widget toplevel, char *prompt, char *init_path, int (*s
 #  include "if_xcmdsrv.pro"
 # endif
 
+#if defined(FEAT_PHP)
+# include "if_php.pro"
+#endif
+
 /*
  * The perl include files pollute the namespace, therefore proto.h must be
  * included before the perl include files.  But then CV is not defined, which

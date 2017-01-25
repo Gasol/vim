@@ -278,6 +278,9 @@ static void	ex_popup(exarg_T *eap);
 # define ex_perl		ex_script_ni
 # define ex_perldo		ex_ni
 #endif
+#ifndef FEAT_PHP
+# define ex_php			ex_script_ni
+#endif
 #ifndef FEAT_PYTHON
 # define ex_python		ex_script_ni
 # define ex_pydo		ex_ni

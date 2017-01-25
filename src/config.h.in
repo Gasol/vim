@@ -328,6 +328,9 @@
 /* Define if you want to include the Perl interpreter. */
 #undef FEAT_PERL
 
+/* Define if you want to include the PHP interpreter. */
+#undef FEAT_PHP
+
 /* Define for linking via dlopen() or LoadLibrary() */
 #undef DYNAMIC_PERL
 

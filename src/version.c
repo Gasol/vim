@@ -488,6 +488,11 @@ static char *(features[]) =
 #else
 	"-perl",
 #endif
+# ifdef FEAT_PHP
+	"+php",
+# else
+	"-php",
+#endif
 #ifdef FEAT_PERSISTENT_UNDO
 	"+persistent_undo",
 #else
